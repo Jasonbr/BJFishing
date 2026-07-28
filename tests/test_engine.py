@@ -411,6 +411,36 @@ class TestWind:
         assert r.score == 1.0
         assert r.wind_direction_deg == 45.0
 
+    def test_direction_summer_south(self) -> None:
+        """夏季南风(180°) → +0.1, 但 score 已 1.0 → clamp 1.0."""
+        r = wind.score_wind(2.0, wind_direction_deg=180.0, season="summer")
+        assert r.score == 1.0
+
+    def test_direction_summer_north(self) -> None:
+        """夏季北风(0°) → -0.1, score 1.0→0.9."""
+        r = wind.score_wind(2.0, wind_direction_deg=0.0, season="summer")
+        assert abs(r.score - 0.9) < 0.001
+
+    def test_direction_winter_south(self) -> None:
+        """冬季南风(180°) → +0.15, score clamp 1.0."""
+        r = wind.score_wind(2.0, wind_direction_deg=180.0, season="winter")
+        assert r.score == 1.0
+
+    def test_direction_winter_north(self) -> None:
+        """冬季北风(0°) → -0.15, score 1.0→0.85."""
+        r = wind.score_wind(2.0, wind_direction_deg=0.0, season="winter")
+        assert abs(r.score - 0.85) < 0.001
+
+    def test_direction_spring_neutral(self) -> None:
+        """春季无风向调整."""
+        r = wind.score_wind(2.0, wind_direction_deg=180.0, season="spring")
+        assert r.score == 1.0
+
+    def test_direction_no_season_no_adj(self) -> None:
+        """无 season 参数 → 无风向调整."""
+        r = wind.score_wind(2.0, wind_direction_deg=180.0)
+        assert r.score == 1.0
+
 
 # ---------------------------------------------------------------------------
 # precipitation.py 测试

@@ -37,12 +37,14 @@ class WindResult:
 def score_wind(
     wind_speed_ms: float,
     wind_direction_deg: float | None = None,
+    season: str | None = None,
 ) -> WindResult:
     """风况评分.
 
     Args:
         wind_speed_ms: 风速（m/s）
         wind_direction_deg: 风向（度 0-360），None=未知
+        season: 季节（spring/summer/autumn/winter），影响风向调整
 
     Returns:
         WindResult: 评分 + 等级
@@ -71,6 +73,25 @@ def score_wind(
         score = 0.1
         level = "dangerous"
         note = f"暴风({wind_speed_ms:.1f}m/s)，危险"
+
+    # 风向-季节交互评分
+    dir_adj = 0.0
+    if wind_direction_deg is not None and season is not None:
+        is_south = 135 <= wind_direction_deg <= 225
+        is_north = wind_direction_deg >= 315 or wind_direction_deg <= 45
+        if season == "summer":
+            if is_south:
+                dir_adj = 0.1
+            elif is_north:
+                dir_adj = -0.1
+        elif season == "winter":
+            if is_south:
+                dir_adj = 0.15
+            elif is_north:
+                dir_adj = -0.15
+        score = max(0.0, min(1.0, score + dir_adj))
+        if dir_adj != 0.0:
+            note += f"（风向季节调整{dir_adj:+.1f}）"
 
     logger.info("wind: %.1f m/s level=%s score=%.2f", wind_speed_ms, level, score)
     return WindResult(

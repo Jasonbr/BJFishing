@@ -84,6 +84,7 @@ async def analyze_fishing(
     weather = conditions.get("weather") or {}
     current = weather.get("current") or {}
     daily = weather.get("daily") or {}
+    hourly = weather.get("hourly") or {}
 
     air_temp_c = _safe_float(current.get("temperature_2m"))
     precip_mm = _safe_float(current.get("precipitation"), default=0.0)
@@ -101,9 +102,14 @@ async def analyze_fishing(
     sub_scores: dict[str, float] = {}
     sub_results: dict[str, Any] = {}
 
-    # 4a. 气压
+    # 提前获取季节（风向评分和季节-溶氧联动需要）
+    season_info = season_mod.get_season()
+
+    # 4a. 气压（含3小时趋势）
+    pressure_series = hourly.get("surface_pressure") or []
+    prev_hpa = _safe_float(pressure_series[0]) if len(pressure_series) >= 2 else None
     if current_hpa is not None:
-        pr = pressure_mod.score_pressure(current_hpa)
+        pr = pressure_mod.score_pressure(current_hpa, prev_hpa=prev_hpa)
         sub_scores["pressure"] = pr.score
         sub_results["pressure"] = pr
     else:
@@ -135,7 +141,7 @@ async def analyze_fishing(
 
     # 4d. 风
     if wind_speed_ms is not None:
-        wr = wind_mod.score_wind(wind_speed_ms, wind_direction_deg)
+        wr = wind_mod.score_wind(wind_speed_ms, wind_direction_deg, season=season_info.season)
         sub_scores["wind"] = wr.score
         sub_results["wind"] = wr
     else:
@@ -148,8 +154,7 @@ async def analyze_fishing(
     sub_scores["precipitation"] = pr2.score
     sub_results["precipitation"] = pr2
 
-    # 4f. 季节
-    season_info = season_mod.get_season()
+    # 4f. 季节（season_info 已提前获取）
     sub_scores["season"] = _season_score(season_info)
     sub_results["season"] = season_info
 
@@ -159,6 +164,12 @@ async def analyze_fishing(
     quality_factor = _water_quality_factor(water_temp_result.data_quality)
     water_score = ox.score * quality_factor
     sub_scores["water"] = round(water_score, 3)
+
+    # 季节-溶氧联动: 溶氧充足时减轻季节扣分,溶氧不足时加重扣分
+    if ox.score >= 0.8:
+        sub_scores["season"] = min(1.0, sub_scores["season"] + 0.1)
+    elif ox.score < 0.5:
+        sub_scores["season"] = max(0.0, sub_scores["season"] - 0.1)
 
     # --- 5. 合规检查 ---
     compliance = check_compliance(

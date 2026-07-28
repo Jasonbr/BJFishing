@@ -168,6 +168,8 @@ def get_weather(lat: float, lng: float) -> dict[str, Any] | None:
             "longitude": lng,
             "current": _CURRENT_VARS,
             "daily": _FORECAST_DAILY_VARS,
+            "hourly": "surface_pressure",
+            "past_hours": 3,
             "timezone": _BJ_TIMEZONE,
             "forecast_days": 3,
             "wind_speed_unit": "ms",
