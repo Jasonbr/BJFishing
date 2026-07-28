@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "water_type": "black_pit",
+    "season": "spring",
+    "spot_name": "朝阳黑坑",
+    "lat": 39.92,
+    "lng": 116.45,
+    "forecast_date": "2026-04-15",
+    "historical_start": "2026-04-12",
+    "historical_end": "2026-04-14",
+    "description": "朝阳黑坑 spring fixture — representative Beijing black_pit data"
+  },
+  "forecast": {
+    "latitude": 39.92,
+    "longitude": 116.45,
+    "generationtime_ms": 0.5,
+    "utc_offset_seconds": 28800,
+    "timezone": "Asia/Shanghai",
+    "timezone_abbreviation": "CST",
+    "current": {
+      "time": "2026-04-15T11:00:00",
+      "interval": 900,
+      "temperature_2m": 18.5,
+      "relative_humidity_2m": 55,
+      "precipitation": 0.0,
+      "wind_speed_10m": 2.5,
+      "wind_direction_10m": 180,
+      "surface_pressure": 1015.0
+    },
+    "daily": {
+      "time": [
+        "2026-04-15",
+        "2026-04-16",
+        "2026-04-17"
+      ],
+      "temperature_2m_max": [
+        22.0,
+        24.0,
+        21.0
+      ],
+      "temperature_2m_min": [
+        10.0,
+        12.0,
+        9.0
+      ],
+      "precipitation_sum": [
+        0.0,
+        1.5,
+        0.0
+      ],
+      "wind_speed_10m_max": [
+        5.0,
+        6.0,
+        4.5
+      ],
+      "sunrise": [
+        "2026-04-15T05:30",
+        "2026-04-16T05:30",
+        "2026-04-17T05:31"
+      ],
+      "sunset": [
+        "2026-04-15T18:45",
+        "2026-04-16T18:44",
+        "2026-04-17T18:43"
+      ],
+      "uv_index_max": [
+        6.5,
+        7.0,
+        6.0
+      ]
+    }
+  },
+  "historical": {
+    "latitude": 39.92,
+    "longitude": 116.45,
+    "generationtime_ms": 0.3,
+    "utc_offset_seconds": 28800,
+    "timezone": "Asia/Shanghai",
+    "timezone_abbreviation": "CST",
+    "daily": {
+      "time": [
+        "2026-04-12",
+        "2026-04-13",
+        "2026-04-14"
+      ],
+      "temperature_2m_mean": [
+        16.0,
+        18.0,
+        15.5
+      ],
+      "precipitation_sum": [
+        0.0,
+        2.0,
+        0.5
+      ],
+      "wind_speed_10m_max": [
+        4.0,
+        5.0,
+        4.5
+      ]
+    }
+  }
+}

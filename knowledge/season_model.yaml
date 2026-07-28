@@ -1,0 +1,85 @@
+# season_model.yaml — 北京四季模型
+# T2.3: 北京四季划分 + 各季钓鱼特征
+# 被 engine/season.py / engine/scoring.py 引用
+
+meta:
+  version: "1.0"
+  updated: "2026-07-28"
+  description: "北京四季划分及钓鱼特征模型"
+  timezone: "Asia/Shanghai"
+
+# 北京四季（按日期范围划分）
+seasons:
+  - id: "spring"
+    name: "春季"
+    date_range:
+      start: "03-01"
+      end: "05-31"
+    avg_temp_c:
+      min: 5.0
+      max: 22.0
+    fishing_activity: "high"
+    note: "鱼产卵期，活性高，但需注意禁渔期"
+
+  - id: "summer"
+    name: "夏季"
+    date_range:
+      start: "06-01"
+      end: "08-31"
+    avg_temp_c:
+      min: 22.0
+      max: 35.0
+    fishing_activity: "medium"
+    note: "高温闷热，早晚最佳，注意溶氧"
+
+  - id: "autumn"
+    name: "秋季"
+    date_range:
+      start: "09-01"
+      end: "11-15"
+    avg_temp_c:
+      min: 5.0
+      max: 22.0
+    fishing_activity: "high"
+    note: "鱼贴秋膘，摄食旺盛，黄金季节"
+
+  - id: "winter"
+    name: "冬季"
+    date_range:
+      start: "11-16"
+      end: "02-29"
+    avg_temp_c:
+      min: -9.0
+      max: 4.0
+    fishing_activity: "low"
+    note: "冰钓季，鲫鱼仍可钓，其他鱼种活性极低"
+
+# 季节评分系数（用于 engine/scoring.py 的 season 维度）
+scoring:
+  spring:
+    coefficient: 0.9
+    reason: "产卵期活性高"
+  summer:
+    coefficient: 0.6
+    reason: "高温抑制，溶氧不足"
+  autumn:
+    coefficient: 1.0
+    reason: "贴秋膘，摄食最旺"
+  winter:
+    coefficient: 0.3
+    reason: "低温停食，仅冰钓鲫鱼"
+
+# 季节性鱼种推荐（与 species_temp.yaml 对应）
+species_recommendation:
+  spring:
+    primary: ["crucian_carp", "common_carp"]
+    secondary: ["silver_carp"]
+  summer:
+    primary: ["grass_carp", "common_carp", "silver_carp", "bighead_carp"]
+    secondary: ["crucian_carp"]
+  autumn:
+    primary: ["common_carp", "crucian_carp", "grass_carp"]
+    secondary: ["bighead_carp"]
+  winter:
+    primary: ["crucian_carp"]
+    secondary: []

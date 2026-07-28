@@ -1,0 +1,136 @@
+# beijing_waters.yaml — 北京水域知识库
+# T2.1: 7 大水域全覆盖 + 黑坑类别
+# 被 compliance/gate.py / tools/analyze.py 引用
+
+meta:
+  version: "1.0"
+  updated: "2026-07-28"
+  description: "北京主要钓鱼水域知识库（7 大水域 + 黑坑类别）"
+
+# 7 大天然/半天然水域
+waters:
+  - id: "miyun_reservoir"
+    name: "密云水库"
+    type: "reservoir"
+    lat: 40.50
+    lng: 117.00
+    segments:
+      - name: "主库区"
+        lat: 40.50
+        lng: 117.00
+      - name: "白河入库区"
+        lat: 40.60
+        lng: 116.85
+      - name: "潮河入库区"
+        lat: 40.45
+        lng: 117.15
+    is_drinking_water_source: true
+    year_round_fishing_banned: true
+    note: "北京市饮用水源一级保护区，全年禁止垂钓"
+
+  - id: "huairou_reservoir"
+    name: "怀柔水库"
+    type: "reservoir"
+    lat: 40.30
+    lng: 116.60
+    segments:
+      - name: "主库区"
+        lat: 40.30
+        lng: 116.60
+    is_drinking_water_source: true
+    year_round_fishing_banned: true
+    note: "北京市饮用水源保护区，全年禁止垂钓"
+
+  - id: "shisanling_reservoir"
+    name: "十三陵水库"
+    type: "reservoir"
+    lat: 40.25
+    lng: 116.22
+    segments:
+      - name: "主库区"
+        lat: 40.25
+        lng: 116.22
+    is_drinking_water_source: false
+    year_round_fishing_banned: false
+    note: "明十三陵景区内水库，非饮用水源"
+
+  - id: "guanting_reservoir"
+    name: "官厅水库"
+    type: "reservoir"
+    lat: 40.20
+    lng: 115.60
+    segments:
+      - name: "北京辖区段"
+        lat: 40.20
+        lng: 115.60
+    is_drinking_water_source: false
+    year_round_fishing_banned: false
+    note: "跨北京/河北水库，仅北京辖区段可钓"
+
+  - id: "yongding_river"
+    name: "永定河"
+    type: "river"
+    segments:
+      - name: "门头沟段"
+        lat: 39.94
+        lng: 115.95
+      - name: "大兴段"
+        lat: 39.73
+        lng: 116.33
+      - name: "房山段"
+        lat: 39.70
+        lng: 115.95
+    is_drinking_water_source: false
+    year_round_fishing_banned: false
+    note: "北京西部主要河流，季节性禁渔期适用"
+
+  - id: "chaobai_river"
+    name: "潮白河"
+    type: "river"
+    segments:
+      - name: "顺义段"
+        lat: 40.15
+        lng: 116.65
+      - name: "通州段"
+        lat: 39.90
+        lng: 116.70
+      - name: "密云段"
+        lat: 40.38
+        lng: 116.85
+    is_drinking_water_source: false
+    year_round_fishing_banned: false
+    note: "北京东部主要河流，季节性禁渔期适用"
+
+  - id: "wenyu_river"
+    name: "温榆河"
+    type: "river"
+    segments:
+      - name: "昌平段"
+        lat: 40.22
+        lng: 116.40
+      - name: "顺义段"
+        lat: 40.15
+        lng: 116.65
+      - name: "通州段"
+        lat: 39.95
+        lng: 116.70
+    is_drinking_water_source: false
+    year_round_fishing_banned: false
+    note: "北京北部主要河流，季节性禁渔期适用"
+
+# 黑坑类别（商业钓场，豁免禁渔期）
+black_pit_category:
+  id: "black_pit"
+  name: "北京黑坑"
+  type: "black_pit"
+  is_drinking_water_source: false
+  year_round_fishing_banned: false
+  closed_season_exempt: true
+  note: "商业收费钓场，不受禁渔期限制"
+  examples:
+    - name: "朝阳黑坑"
+      lat: 39.92
+      lng: 116.45
+    - name: "通州黑坑"
+      lat: 39.90
+      lng: 116.75

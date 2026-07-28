@@ -1,0 +1,105 @@
+# compliance_2026.yaml — 北京钓鱼合规规则 2026
+# T2.4: 版本化合规规则（effective_date + superseded_by）
+# 被 compliance/gate.py 加载，用于 block_analysis 判定
+
+meta:
+  version: "2026.1"
+  effective_date: "2026-03-01"
+  superseded_by: null
+  description: "北京市钓鱼合规规则 2026 年版"
+  source: "北京市农业农村局《关于北京市禁止和限制使用的渔具渔法名录》+ 饮用水源保护条例"
+  note: "本文件仅为知识库参考，不构成法律意见"
+
+# 天然水域禁渔期（季节性）
+closed_season:
+  natural_waters:
+    start: "04-01"
+    end: "07-31"
+    reason: "鱼类繁殖期保护"
+    affected_water_types: ["river", "reservoir"]
+    exempt_water_types: ["black_pit"]
+    note: "天然水域（河流/水库）4-7 月禁渔，黑坑豁免"
+
+# 饮用水源保护区（全年禁钓）
+drinking_water_protection:
+  year_round_banned:
+    - water_id: "miyun_reservoir"
+      name: "密云水库"
+      reason: "一级饮用水源保护区"
+    - water_id: "huairou_reservoir"
+      name: "怀柔水库"
+      reason: "饮用水源保护区"
+  note: "以上水库全年禁止垂钓，不受禁渔期豁免"
+
+# 禁用渔具渔法
+banned_gear:
+  - id: "electric_fishing"
+    name: "电鱼"
+    severity: "criminal"
+    penalty: "追究刑事责任"
+  - id: "poison_fishing"
+    name: "毒鱼"
+    severity: "criminal"
+    penalty: "追究刑事责任"
+  - id: "explosive_fishing"
+    name: "炸鱼"
+    severity: "criminal"
+    penalty: "追究刑事责任"
+  - id: "gill_net"
+    name: "刺网"
+    severity: "administrative"
+    penalty: "罚款 1000-5000 元，没收渔具"
+  - id: "fish_trap"
+    name: "地笼"
+    severity: "administrative"
+    penalty: "罚款 500-2000 元，没收渔具"
+  - id: "multi_hook_longline"
+    name: "多钩长线"
+    severity: "administrative"
+    penalty: "罚款 500-2000 元"
+
+# 允许的渔具
+allowed_gear:
+  - id: "single_hook_rod"
+    name: "单钩手竿"
+    note: "一竿一线一钩"
+  - id: "double_hook_rod"
+    name: "双钩手竿"
+    note: "一竿一线双钩"
+  - id: "ice_fishing_rod"
+    name: "冰钓竿"
+    note: "冬季冰钓专用"
+
+# 最小可捕标准（体长限制）
+minimum_size:
+  - species_id: "crucian_carp"
+    name: "鲫鱼"
+    min_length_cm: 10
+  - species_id: "common_carp"
+    name: "鲤鱼"
+    min_length_cm: 15
+  - species_id: "grass_carp"
+    name: "草鱼"
+    min_length_cm: 20
+  - species_id: "silver_carp"
+    name: "鲢鱼"
+    min_length_cm: 20
+  - species_id: "bighead_carp"
+    name: "鳙鱼"
+    min_length_cm: 20
+
+# 黑坑豁免条款
+black_pit_exemption:
+  exempt_from_closed_season: true
+  exempt_from_minimum_size: true
+  exempt_from_drinking_water_protection: true
+  reason: "商业钓场为人工养殖水域，不适用天然水域禁渔规定"
+  note: "黑坑仍需遵守禁用渔具渔法规定"
+
+# 合规提醒（输出到用户的 5 条提醒）
+compliance_reminders:
+  - "请遵守北京市禁渔期规定：天然水域 4 月 1 日至 7 月 31 日禁止垂钓"
+  - "密云水库、怀柔水库为饮用水源保护区，全年禁止垂钓"
+  - "禁止使用电鱼、毒鱼、炸鱼等破坏性渔法，违者追究刑事责任"
+  - "钓获未达最小可捕标准的鱼种请放生"
+  - "鱼情预判仅供参考，请以实际天气和水情为准，注意人身安全"

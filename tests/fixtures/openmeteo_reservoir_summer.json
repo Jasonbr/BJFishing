@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "water_type": "reservoir",
+    "season": "summer",
+    "spot_name": "密云水库",
+    "lat": 40.5,
+    "lng": 117.0,
+    "forecast_date": "2026-07-28",
+    "historical_start": "2026-07-25",
+    "historical_end": "2026-07-27",
+    "description": "密云水库 summer fixture — representative Beijing reservoir data"
+  },
+  "forecast": {
+    "latitude": 40.5,
+    "longitude": 117.0,
+    "generationtime_ms": 0.5,
+    "utc_offset_seconds": 28800,
+    "timezone": "Asia/Shanghai",
+    "timezone_abbreviation": "CST",
+    "current": {
+      "time": "2026-07-28T11:00:00",
+      "interval": 900,
+      "temperature_2m": 30.8,
+      "relative_humidity_2m": 65,
+      "precipitation": 0.0,
+      "wind_speed_10m": 1.92,
+      "wind_direction_10m": 180,
+      "surface_pressure": 1006.5
+    },
+    "daily": {
+      "time": [
+        "2026-07-28",
+        "2026-07-29",
+        "2026-07-30"
+      ],
+      "temperature_2m_max": [
+        34.6,
+        34.8,
+        34.3
+      ],
+      "temperature_2m_min": [
+        22.1,
+        22.5,
+        22.0
+      ],
+      "precipitation_sum": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "wind_speed_10m_max": [
+        5.0,
+        6.0,
+        4.5
+      ],
+      "sunrise": [
+        "2026-07-28T05:09",
+        "2026-07-29T05:30",
+        "2026-07-30T05:31"
+      ],
+      "sunset": [
+        "2026-07-28T19:32",
+        "2026-07-29T18:44",
+        "2026-07-30T18:43"
+      ],
+      "uv_index_max": [
+        8.5,
+        8.0,
+        7.5
+      ]
+    }
+  },
+  "historical": {
+    "latitude": 40.5,
+    "longitude": 117.0,
+    "generationtime_ms": 0.3,
+    "utc_offset_seconds": 28800,
+    "timezone": "Asia/Shanghai",
+    "timezone_abbreviation": "CST",
+    "daily": {
+      "time": [
+        "2026-07-25",
+        "2026-07-26",
+        "2026-07-27"
+      ],
+      "temperature_2m_mean": [
+        27.5,
+        28.0,
+        27.7
+      ],
+      "precipitation_sum": [
+        0.0,
+        0.0,
+        0.2
+      ],
+      "wind_speed_10m_max": [
+        4.0,
+        5.0,
+        4.5
+      ]
+    }
+  }
+}

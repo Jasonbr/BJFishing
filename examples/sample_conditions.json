@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "description": "BJFishing MCP Server 示例输入 — 3 水域 demo",
+    "version": "0.1.0",
+    "usage": "python cli.py collect --spot-name '密云水库' | python -m services.server",
+    "note": "spot_name 与 lat/lng 二选一；historical_days 默认 3"
+  },
+  "examples": [
+    {
+      "name": "密云水库（水库/野生）",
+      "water_type": "reservoir",
+      "spot_name": "密云水库",
+      "lat": 40.50,
+      "lng": 117.00,
+      "historical_days": 3,
+      "notes": "北京最大水库，饮用水源保护区，全年禁钓。仅作示例输入。"
+    },
+    {
+      "name": "温榆河顺义段（河流/野生）",
+      "water_type": "river",
+      "spot_name": "温榆河顺义段",
+      "lat": 40.15,
+      "lng": 116.65,
+      "historical_days": 3,
+      "notes": "北京五大河流之一，3-6月禁渔期内 block_analysis=true。"
+    },
+    {
+      "name": "朝阳黑坑（黑坑/商业）",
+      "water_type": "black_pit",
+      "spot_name": "朝阳黑坑",
+      "lat": 39.92,
+      "lng": 116.45,
+      "historical_days": 3,
+      "notes": "商业钓场，不受禁渔期/禁渔区限制，全年开放。"
+    }
+  ]
+}

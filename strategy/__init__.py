@@ -1,0 +1,1 @@
+"""BJFishing strategy package."""

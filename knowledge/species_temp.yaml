@@ -1,0 +1,112 @@
+# species_temp.yaml — 北京常见鱼种适温知识库
+# T2.2: 5 鱼种适温范围
+# 被 engine/scoring.py / strategy/bait.py 引用
+
+meta:
+  version: "1.0"
+  updated: "2026-07-28"
+  description: "北京常见鱼种最适水温范围（用于温度评分维度）"
+  data_source: "北京渔业手册 + 钓鱼经验汇总"
+
+species:
+  - id: "crucian_carp"
+    name: "鲫鱼"
+    scientific: "Carassius auratus"
+    optimal_temp_c:
+      min: 15.0
+      max: 25.0
+      peak: 20.0
+    feeding_temp_c:
+      min: 4.0
+      max: 32.0
+    winter_behavior: "冬眠但不完全停食，冰下仍可钓获"
+    season_preference:
+      spring: "high"
+      summer: "medium"
+      autumn: "high"
+      winter: "low"
+    note: "耐寒性强，北京四季可钓"
+
+  - id: "common_carp"
+    name: "鲤鱼"
+    scientific: "Cyprinus carpio"
+    optimal_temp_c:
+      min: 18.0
+      max: 28.0
+      peak: 23.0
+    feeding_temp_c:
+      min: 8.0
+      max: 34.0
+    winter_behavior: "深水越冬，低温食欲差"
+    season_preference:
+      spring: "medium"
+      summer: "high"
+      autumn: "high"
+      winter: "very_low"
+    note: "北京黑坑主力鱼种"
+
+  - id: "grass_carp"
+    name: "草鱼"
+    scientific: "Ctenopharyngodon idella"
+    optimal_temp_c:
+      min: 20.0
+      max: 30.0
+      peak: 25.0
+    feeding_temp_c:
+      min: 12.0
+      max: 36.0
+    winter_behavior: "完全停食，深水越冬"
+    season_preference:
+      spring: "low"
+      summer: "high"
+      autumn: "medium"
+      winter: "none"
+    note: "喜高温，夏季主钓对象"
+
+  - id: "silver_carp"
+    name: "鲢鱼"
+    scientific: "Hypophthalmichthys molitrix"
+    optimal_temp_c:
+      min: 18.0
+      max: 28.0
+      peak: 23.0
+    feeding_temp_c:
+      min: 10.0
+      max: 34.0
+    winter_behavior: "深水越冬，低温食欲差"
+    season_preference:
+      spring: "low"
+      summer: "high"
+      autumn: "medium"
+      winter: "very_low"
+    note: "滤食性，水库常见"
+
+  - id: "bighead_carp"
+    name: "鳙鱼"
+    scientific: "Hypophthalmichthys nobilis"
+    optimal_temp_c:
+      min: 18.0
+      max: 28.0
+      peak: 24.0
+    feeding_temp_c:
+      min: 10.0
+      max: 34.0
+    winter_behavior: "深水越冬，低温食欲差"
+    season_preference:
+      spring: "low"
+      summer: "high"
+      autumn: "medium"
+      winter: "very_low"
+    note: "又称胖头鱼，水库/黑坑常见"
+
+# 评分辅助：温度偏离最适区间的扣分系数
+scoring:
+  in_optimal_range:
+    score: 1.0
+    note: "最适水温，满分区"
+  within_feeding_range:
+    score: 0.6
+    note: "可摄食但非最适"
+  outside_feeding_range:
+    score: 0.1
+    note: "超出摄食温度，严重减分"
