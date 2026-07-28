@@ -151,13 +151,23 @@ async def collect_conditions(
         logger.warning("collect: recent_catch autofill failed: %s", exc)
 
 
+    # 序列化 astronomy dataclass → dict（避免 json.dumps default=str 输出 repr）
+    astronomy_serialized: Any = None
+    if astronomy_info is not None and hasattr(astronomy_info, "__dataclass_fields__"):
+        astronomy_serialized = {
+            k: _serialize_value(getattr(astronomy_info, k))
+            for k in astronomy_info.__dataclass_fields__
+        }
+    elif astronomy_info is not None:
+        astronomy_serialized = astronomy_info
+
     return {
         "spot_name": spot_name,
         "lat": lat,
         "lng": lng,
         "water_type": water_type,
         "weather": weather_data,
-        "astronomy": astronomy_info,
+        "astronomy": astronomy_serialized,
         "historical_avg_temp": historical_avg_temp,
         "historical_days": historical_days,
         "data_quality": data_quality,
@@ -190,3 +200,14 @@ def _degraded_result(
         "recent_catches": [],
         "collected_at": datetime.now(BJ_TZ),
     }
+
+
+def _serialize_value(val: Any) -> Any:
+    """递归序列化（处理 datetime/date 对象）."""
+    if hasattr(val, "isoformat"):
+        return val.isoformat()
+    if isinstance(val, (list, tuple)):
+        return [_serialize_value(v) for v in val]
+    if isinstance(val, dict):
+        return {k: _serialize_value(v) for k, v in val.items()}
+    return val

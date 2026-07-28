@@ -292,6 +292,8 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"error": str(exc), "type": type(exc).__name__}, ensure_ascii=False))
         return 1
     print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
+    if isinstance(result, dict) and ("error" in result or result.get("status") == "blocked"):
+        return 1
     return 0
 
 

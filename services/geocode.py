@@ -107,9 +107,9 @@ def get_location(name: str) -> tuple[float, float]:
         return result
     logger.warning("geocode: Nominatim 未找到 '%s'", name)
 
-    # --- 4. 最终 fallback ---
-    logger.warning("geocode: 所有后端失败，fallback 到北京市中心 '%s'", name)
-    return BEIJING_CENTER
+    # --- 4. 所有后端失败 → 报错（不再静默 fallback 到北京市中心） ---
+    logger.warning("geocode: 所有后端失败，未找到 '%s'", name)
+    raise ValueError(f"未找到钓点 '{name}'，请使用 --lat/--lng 手动指定坐标")
 
 
 def _gaode_geocode(name: str) -> tuple[float, float] | None:

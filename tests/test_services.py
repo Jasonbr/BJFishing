@@ -49,13 +49,10 @@ class TestGeocode:
         assert lng is not None
 
     def test_unknown_spot_fallback(self) -> None:
-        """未知钓点 → fallback 到北京市中心."""
-        lat, lng = geocode.get_location("完全不存在的钓点名")
-        assert lat is not None
-        assert lng is not None
-        # 应该 fallback 到北京市中心附近
-        assert abs(lat - 39.9042) < 1.0
-        assert abs(lng - 116.4074) < 1.0
+        """未知钓点 → 抛出 ValueError（不再静默 fallback 到北京市中心）."""
+        import pytest
+        with pytest.raises(ValueError, match="未找到钓点"):
+            geocode.get_location("完全不存在的钓点名")
 
     def test_all_builtin_spots_return_valid_coords(self) -> None:
         """所有内置钓点都返回有效坐标."""
@@ -234,7 +231,7 @@ class TestServicesIntegration:
         assert info.moon_phase is not None
 
     def test_geocode_fallback_then_astronomy(self) -> None:
-        """未知钓点→fallback 坐标→天文数据."""
-        lat, lng = geocode.get_location("未知神秘钓点")
-        info = get_astronomy(lat, lng)
-        assert info.moon_phase is not None
+        """未知钓点 → ValueError（BUG 5 修复后不再静默 fallback）."""
+        import pytest
+        with pytest.raises(ValueError, match="未找到钓点"):
+            geocode.get_location("未知神秘钓点")

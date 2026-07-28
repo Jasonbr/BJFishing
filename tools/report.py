@@ -84,11 +84,11 @@ async def report_fishing(
         return _build_json_report(analysis_result, "full", strategy)
 
     # LLM 模式: qwen / ollama, 带 auto-fallback
-    llm_report = _generate_llm_report(
+    llm_report, llm_status = _generate_llm_report(
         analysis_result, strategy, output_mode,
     )
 
-    return _build_json_report(analysis_result, "full", strategy, llm_report)
+    return _build_json_report(analysis_result, "full", strategy, llm_report, llm_status)
 
 
 # ---------- JSON 报告 ----------
@@ -99,6 +99,7 @@ def _build_json_report(
     quality: str,
     strategy: dict[str, Any] | None = None,
     llm_report: str | None = None,
+    llm_status: str | None = None,
 ) -> dict[str, Any]:
     """T3.4a: 构建 JSON 结构化报告."""
     report: dict[str, Any] = {
@@ -113,6 +114,7 @@ def _build_json_report(
         "compliance": analysis_result.get("compliance", {}),
         "strategy": strategy or {},
         "llm_report": llm_report,
+        "llm_status": llm_status or ("json_mode" if llm_report is None and quality != "degraded" else None),
         "disclaimer": _DISCLAIMER,
         "generated_at": analysis_result.get("analyzed_at"),
     }
@@ -158,13 +160,18 @@ def _generate_llm_report(
     analysis_result: dict[str, Any],
     strategy: dict[str, Any],
     requested_mode: str,
-) -> str | None:
+) -> tuple[str | None, str]:
     """多 LLM 自动切换: qwen 失败 → ollama → None (JSON fallback).
 
     Args:
         requested_mode: "qwen" or "ollama"
+
+    Returns:
+        (llm_report_text, status_message)
+        status_message 解释结果，如 "qwen:success" / "qwen:no_api_key, ollama:connection_failed"
     """
     prompt = _build_llm_prompt(analysis_result, strategy)
+    failures: list[str] = []
 
     # 按请求模式优先调用
     if requested_mode == "qwen":
@@ -172,35 +179,34 @@ def _generate_llm_report(
         result = _call_qwen(prompt)
         if result:
             logger.info("LLM: qwen success")
-            return result
+            return result, "qwen:success"
+        failures.append("qwen:failed")
         # 2. Qwen 失败 → Ollama
         logger.warning("LLM: qwen failed, falling back to ollama")
         result = _call_ollama(prompt)
         if result:
             logger.info("LLM: ollama fallback success")
-            return result
-        # 3. 都失败 → JSON fallback (return None)
-        logger.warning("LLM: all LLM backends failed, JSON fallback")
-        return None
+            return result, "ollama:fallback_success"
+        failures.append("ollama:failed")
 
-    if requested_mode == "ollama":
+    elif requested_mode == "ollama":
         # 1. 尝试 Ollama
         result = _call_ollama(prompt)
         if result:
             logger.info("LLM: ollama success")
-            return result
+            return result, "ollama:success"
+        failures.append("ollama:failed")
         # 2. Ollama 失败 → Qwen
         logger.warning("LLM: ollama failed, falling back to qwen")
         result = _call_qwen(prompt)
         if result:
             logger.info("LLM: qwen fallback success")
-            return result
-        # 3. 都失败 → JSON fallback
-        logger.warning("LLM: all LLM backends failed, JSON fallback")
-        return None
+            return result, "qwen:fallback_success"
+        failures.append("qwen:failed")
 
-    return None
-
+    # 3. 都失败 → JSON fallback
+    logger.warning("LLM: all LLM backends failed, JSON fallback")
+    return None, ", ".join(failures) + ", json_fallback"
 
 def _build_llm_prompt(
     analysis_result: dict[str, Any],

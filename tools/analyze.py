@@ -121,6 +121,9 @@ async def analyze_fishing(
         tr = temp_mod.score_temperature(water_temp_c, air_temp_c, species_id)
         sub_scores["temperature"] = tr.score
         sub_results["temperature"] = tr
+        # 检查 species_id 是否有效
+        if species_id and species_id not in temp_mod._load_species():
+            data_quality_reasons.append(f"未知鱼种ID '{species_id}'，使用通用温度评分")
     else:
         sub_scores["temperature"] = _NEUTRAL_SCORE
         data_quality_reasons.append("气温数据缺失，使用中性分")
@@ -164,6 +167,30 @@ async def analyze_fishing(
         fishing_date=None,
         gear_id=None,
     )
+
+    # --- 5b. 合规拦截 → 不返回 fishing_score ---
+    if compliance.block_analysis:
+        logger.warning(
+            "analyze: blocked by compliance: %s", compliance.reasons,
+        )
+        return {
+            "spot_name": spot_name,
+            "lat": conditions["lat"],
+            "lng": conditions["lng"],
+            "water_type": wtype,
+            "fishing_score": None,
+            "sub_scores": sub_scores,
+            "sub_results": _serialize_results(sub_results),
+            "compliance": compliance.to_dict(),
+            "conditions": _serialize_conditions(conditions),
+            "data_quality": data_quality,
+            "data_quality_reasons": data_quality_reasons,
+            "confidence": "blocked",
+            "blocked": True,
+            "blocked_reason": "; ".join(compliance.reasons) if compliance.reasons else "合规拦截",
+            "weights_used": {},
+            "analyzed_at": datetime.now(BJ_TZ).isoformat(),
+        }
 
     # --- 6. 计算总分 ---
     weights = get_weights(season_info.season)

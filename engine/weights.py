@@ -163,12 +163,11 @@ def compute_fishing_score(
         + precipitation_score * weights.precipitation
         + season_score * weights.season
         + water_score * weights.water
-        + fb
     )
 
-    # 归一化（权重总和可能 ≠ 1.0）
+    # 归一化（权重总和可能 ≠ 1.0），feedback 不参与归一化
     if weights.total > 0:
-        score = score / weights.total * 0.95 + fb  # feedback 不归一化
+        score = score / weights.total * 0.95 + fb
 
     # 限制到 0-1
     score = max(0.0, min(1.0, score))
